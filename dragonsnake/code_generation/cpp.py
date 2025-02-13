@@ -40,9 +40,14 @@ class CPPGenerator(CodeGenerator):
             operator = "*"
         if isinstance(operator_node, _ast.Div):
             operator = "/"
+        if isinstance(operator_node, _ast.Pow):
+            operator = "**"
         if operator is None:
             self.throw_feature_not_supported("bin_op/operator", operator_node)
-        source_code = left_expression + " " + operator + " " + right_expression
+        if operator == "**":
+            source_code = "pow(" + left_expression + ", " + right_expression + ")"
+        else:
+            source_code = left_expression + " " + operator + " " + right_expression
         return source_code
 
     def generate_call(self, module: _ast.Module, call: _ast.Call) -> str:
